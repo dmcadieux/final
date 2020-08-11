@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Homepage
+{% endblock %}
+
+{% block main %}
+<form action={{ name }} method="post">
+
+    <div>
+        <div>
+            <h5>Enter Subreddit</h5>
+
+            <input type="text" list="subreddits" name="subreddit" id="subreddit">
+
+            <datalist id="subreddits">
+                {% for row in distinct %}
+                <option>{{ row[0] }}</option>
+                {% endfor %}
+            </datalist>
+        </div>
+
+        <div>
+            <h5>Minimum Frequency (out of 10k)</h5>
+            <select name="min" placeholder="1">
+                <option value="0">0</option>
+                <option value="0.1"> 0.1</option>
+                <option value="0.5">0.5</option>
+                <option value="1">1</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+
+        <input type="submit" id="submit">
+    </div>
+
+    <p>{{ title }}</p>
+</form>
+
+{% for list in result %}
+<p>{{ critvals[loop.index0] }} to {{ critvals[loop.index0 + 1] }} </p>
+<table>
+    <thead>
+        <tr>
+            {% for item in tablehead %}
+            <td>{{ item }}</td>
+            {% endfor %}
+        </tr>
+    </thead>
+    {% for row in list %}
+    <tr>
+        {% for col in row %}
+        <td>{{ col }}</td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+{% endfor %}
+
+
+<script>
+    document.getElementById('subreddit').onkeyup = function () {
+        if (document.querySelector('#subreddit').value === null ) {
+            document.querySelector('#submit').disabled = true;
+        } else {
+            document.querySelector('#submit').disabled = false;
+        }
+    }
+</script>
+
+{% endblock %}

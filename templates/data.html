@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Homepage
+{% endblock %}
+
+{% block main %}
+<form action="/data" method="post">
+    <p>Select Subreddit</p>
+    <input type="text" name="subreddit" autocomplete="on">
+    <select name="min" placeholder="1">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="5">5</option>
+        <option value="10">10</option>
+    </select>
+    <input type="submit">
+
+    <p>{{ title }}</p>
+
+    <table>
+        <thead>
+            <tr>
+                <td>Word</td>
+                <td>Freq in Subreddit</td>
+                <td>Avg Freq in Reddit</td>
+                <td>Times the Average</td>
+            </tr>
+        </thead>
+        {% for row in result %}
+        <tr>
+            {% for col in row %}
+            <td>{{ col }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+
+
+</form>
+{% endblock %}

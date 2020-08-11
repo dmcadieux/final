@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Homepage
+{% endblock %}
+
+{% block main %}
+    <div class="col-md-8 mx-5 my-5">
+        <p>
+            Welcome to Subreddit Lexicon. The purpose of this little project is to find the unique vocabulary of each subreddit community.
+            It's submitted as part of the requirements for completing the CS50 online course on edx.<br /><br />
+
+            Due to data processing limitations, there are currently only a few data points and they are broken down by month. Pick the time period
+            you want to query from the sidebar.<br /><br />
+
+            All frequencies are displayed in occurrences per 10,000 words. A word with a value of '1' in the frequency column appears once every
+            10,000 words on average. A word with a value of 0.1 appears once every 100,000 words on average.<br /><br />
+
+            Results are calculated by finding the ratio of the frequency of a word in a particular subreddit, and comparing it to its frequency on reddit as a whole.
+            The natural logarithm is used to scale down the x-axis so that results are easier to visualize.<br /><br />
+            
+            \[uniqueness = {ln{ \left( sfreq^2 \over rfreq \right) }}\]<br /><br />
+
+            Since the size of the data can get quite large, the analysis is limited to the top 5,000 commented subreddits for that time period. If you know a subreddit
+            exists for a particular time period but it isn't found, it wasn't in the top 5,000 most commented subs. <br /><br />
+
+            The results work best for less broad subreddits and places like /r/pics or /r/funny don't have very unique vocabularies. More topic-oriented or eccentric subreddits tend
+            to display more unique vocabularies.<br /><br />
+
+            Future plans are to include more statistics related to subreddit commenting, such as the number of users who used each word, total numbers
+            of commenters per subreddit, and time-series results. <br /><br />
+
+            Click on a time period in the sidebar to continue.
+        </p>
+    </div>
+
+
+{% endblock %}

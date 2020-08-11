@@ -1,0 +1,196 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Homepage
+{% endblock %}
+
+{% block main %}
+<!--"col-sm-9 ml-sm-auto col-log-10 px-md-4"-->
+<!--d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom-->
+
+    <div class="col mlr-md-auto" id="right-container">
+
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 my-3 border-bottom" id="form-container">
+            <form id="entry-form" action={{ name }} method="post" onsubmit="getLast(); return true;">
+
+                <div class="form-bar-elements" id="input-section">
+                    <div id="input">
+                        <h5>Enter Subreddit</h5>
+
+                        <div id="inputfield">
+
+                        </div>
+
+                        <div class="form-bar-elements" id="datalist-container">
+                            <datalist id="subreddits">
+                                {% for row in distinct %}
+                                <option>{{ row[0] }}</option>
+                                {% endfor %}
+                            </datalist>
+                        </div>
+                    </div>
+
+                    <div class="form-bar-elements" id="cutoff-container">
+                        <h5 id="min">Min</h5>
+                        <select name="min">
+                            <option value="0" selected>0</option>
+                            <option value="0.1"> 0.1</option>
+                            <option value="0.5">0.5</option>
+                            <option value="1">1</option>
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                        </select>
+                    </div>
+
+                    <div class="form-bar-elements" id="sub-container">
+                        <input type="submit" id="submit">
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+
+        <div id="wordlist-title">
+
+        </div>
+
+        <div class="row" id="results-container">
+
+            <div class="col-sm-4.5 px-4" id="words-container">
+
+                <table class="table-responsive table-striped table-sm" id="word-list">
+                    <thead>
+                        <tr>
+                            {% for item in tablehead %}
+                            <th scope="col">{{ item }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody id="results-rows">
+                        {% for row in result %}
+                        <tr>
+                            {% for col in row %}
+                            {% if loop.index0 != (row|length - 1) %}
+                            {% if loop.index0 < 1 %}
+                            <td>{{ col }}</td>
+                            {% else %}
+                            <td id="data-cells">{{ "%.5g"|format(col) }}</td>
+                            {% endif %}
+                            {% else %}
+                            <td>{{ "%.5g"|format(col|log) }}</td>
+
+
+
+                        <!--<td>{{ "%.5g"|format(col|log) }}</td>-->
+                        {% endif %}
+                        {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+
+            <div class="col-xl" id="graph-container">
+                <p>{{ title }}</p>
+                <canvas class="my-4 w-40 chartjs-render-monitor" id="myChart"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+<script>
+    // Gets last value entered in form
+    function getLast() {
+        var last = document.querySelector("#subreddit").value;
+        var key = "result";
+
+        localStorage.setItem(key, last);
+    }
+
+
+    // Pops input with last entry. Blank otherwise.
+    function popLast() {
+        last = localStorage.getItem("result")
+        if (last === null) {
+            last = '';
+        }
+        document.querySelector("#inputfield").innerHTML = '<input type="text" list="subreddits" name="subreddit" id="subreddit" value=' + '\"' + last + '\">'
+    }
+
+    function showChart() {
+
+        console.log(datas);
+        if (datas === null) {
+            document.querySelector("#myChart").hide();
+        }
+    }
+
+
+    function myFunc(vars) {
+        return vars
+    }
+
+    if ({{ show }} === 0) {
+
+    }
+    else {
+
+        document.getElementById('wordlist-title').innerHTML = '<h5>Word List</h5>\n' + '<p id = "wordlist-subheading" > (Frequencies given as instances per 10k words)</p >'
+
+        datas = myFunc({{ graph | tojson }});
+
+        let myChart = document.getElementById('myChart');
+        Chart.defaults.global.defaultColor = "#000000";
+
+        let massPopChart = new Chart(myChart, {
+        type: 'scatter',
+        data: {
+            datasets: [{ label: 'Word', data: datas }]
+        },
+        options: {
+            tooltips: {
+                callbacks: {
+                    label: function (tooltipItem, data) {
+                        var word = data.datasets[tooltipItem.datasetIndex].label || '';
+
+                        if (word) {
+                            word += ': ';
+                        }
+
+                        word += '(' + (Math.round(tooltipItem.xLabel * 100) / 100) + ', ' + (Math.round(tooltipItem.yLabel * 100) / 100) + ')';
+                        return word;
+                    }
+                }
+            },
+            scales: {
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'frequency (per 10k)'
+                    },
+                    ticks: {
+                        beginAtZero: true
+                    },
+                }],
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'uniqueness index'
+                    }
+                }]
+
+            }
+        }
+        });
+    }
+
+
+
+    window.onload = popLast(), massPopChart, showChart();
+</script>
+
+    {% endblock %}

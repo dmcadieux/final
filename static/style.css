@@ -1,0 +1,84 @@
+ul {
+    list-style: none;
+}
+
+/*Sidebar elements*/
+
+.top-left {
+    padding-top: 9px;
+}
+
+/*Form elements*/
+
+#form-contaire {
+    display: flex;
+}
+
+#input {
+    display: inline-block;
+}
+
+#cutoff-container {
+    display: inline-block;
+}
+
+#sub-container {
+    display: inline-block;
+}
+
+/*Main Container*/
+.main-container {
+    width: 50%
+}
+
+#size-monitor, #monitor-expand, #monitor-shrink {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    overflow: hidden;
+    pointer-events: none;
+    visibility: hidden;
+    z-index: -1;
+}
+
+/*Results container*/
+
+#right-container {
+    margin: 1px;
+}
+
+#words-container {
+    height: 75vh;
+    display: inline-flex;
+}
+
+#graph-container {
+    display: inline-block;
+}
+
+#wordlist-subheading {
+    font-size: 12px;
+}
+
+
+/*Table elements*/
+
+#data-cells {
+    text-align: center;
+    overflow-wrap: break-word;
+}
+
+td {
+    max-width: 147px;
+}
+
+
+/*Chart elements*/
+
+#myChart {
+    width: 711px;
+    height: 300px;
+    display: block;
+}

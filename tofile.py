@@ -28,11 +28,6 @@ from sys import argv, exit
 f = open("wordcount.json", "w")
 f.close()
 
-# filename = "comments\\test.txt"
-# output = "wordcount.json"
-
-# subreddits = ["reddit.com", ""]
-
 count_all_comments = 0
 comments_per_sub = 0
 words_per_sub = 0
@@ -81,7 +76,6 @@ def make_sub_dict():
     wordcount = my_dict()
     total_comments = 0
     total_words = 0
-    # ignore = [",", ".", ";", ":", "(", ")", "'", '"', "[", "]", "{", "}", "?", "!", "*", "<", ">", "@"]
 
     with open(filename, 'r') as f:
         for line in f:
@@ -112,10 +106,6 @@ def make_sub_dict():
 
                     # Adds words to subreddit frequency dict
                     word = word.lower()
-                    
-                    # Re-apply if above tokenization fails (line 98)
-                    # if word in ignore:
-                        # continue
 
                     # Old version. I like this better because it ignores all kinds of string junk, even if it misses emojis.
                     if not word.isalnum():
@@ -195,8 +185,6 @@ if len(argv) != 2:
 else:
     filename = argv[1]
 
-    # Re-init if dumping to target file
-    # output = argv[2]
 
 with open(filename, 'r') as f:
     
@@ -253,31 +241,7 @@ for entry in r:
     for word in r[entry]:
         c.execute("INSERT INTO lexicon (subreddit, subredditsearchkey, word, frequency) VALUES(?, ?, ?, ?)", (title, searchkey, word, (r[entry][word] / subreddit_wordcount[entry] * 10000)))
 
-        # c.execute(words, (word, r[entry][word]))
-
 conn.commit()
 conn.close()
 
-# This is the query to return unique words
-# SELECT m_word, (frequency - m_frequency) FROM master a LEFT JOIN SELECT word a123redditcom b ON a.m_word = b.word ORDER BY (frequency - m_frequency) DESC
-
-# New query. Testing this
-# SELECT word, (frequency - m_frequency) FROM lexicon INNER JOIN master ON lexicon.word = master.m_word WHERE subreddit="123redditcom"
-	# ORDER BY (frequency - m_frequency) DESC
-
-# Modify this to be more general. Write full contents of each month to json file in this program. Write another program to read from json file, filter, and assign to db
-
-
-# with open(output, 'w') as o:
-    # o.write(json.dumps(r))
-
-# print("Number of words per subreddit: ", subreddit_wordcount)
-# print("Number of comments per subreddit: ", comments_per_sub)
-# print("Frequency of words in each subreddit: ", lexicon)
-# print(r)
-
-# Modify result function to add each subreddit to a table in a subreddit db
-# Figure out how to link SQL and Flask to this IDE
-# Run a bunch of SQL queries to create avg freqs per million words as primary comparison
-# Start designing webpage where user can input subreddit and get top 100 distinct words
 
